@@ -1,7 +1,6 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import * as XLSX from 'xlsx';
-import { getAllowedEmail } from '@/lib/access';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -13,7 +12,6 @@ const COLS = {
 const num = v => { const x = Number(String(v).replace(/,/g, '')); return Number.isFinite(x) && x >= 0 ? x : 0; };
 
 export async function GET() {
-  if (!(await getAllowedEmail())) return Response.json({ error: 'Not allowed' }, { status: 403 });
   try {
     const buf = await readFile(path.join(process.cwd(), 'data', 'area_data.xlsx'));
     const wb = XLSX.read(buf, { type: 'buffer' });
